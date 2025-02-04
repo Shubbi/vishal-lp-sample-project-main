@@ -17,6 +17,18 @@ namespace Data.Repositories
             _documentSession = documentSession;
         }
 
+        public IEnumerable<User> Get(string tag)
+        {
+            var query = _documentSession.Advanced.DocumentQuery<User, UsersListIndex>();
+
+            if(!string.IsNullOrWhiteSpace(tag))
+            {
+                query = query.Search("Tags", tag);
+            }
+
+            return query.ToList();
+        }
+
         public IEnumerable<User> Get(UserTypes? userType = null, string name = null, string email = null)
         {
             var query = _documentSession.Advanced.DocumentQuery<User, UsersListIndex>();

@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "26c5397e-2163-4643-ae23-13c5eb581e25",
+		"_postman_id": "c09a8a4b-e90c-4a6b-9174-184edc252038",
 		"name": "LendingPad-SampleProject",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30292534"
+		"_exporter_id": "41762868"
 	},
 	"item": [
 		{
@@ -126,6 +126,28 @@
 			"item": [
 				{
 					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let userId = pm.request.url.path[1];\r",
+									"\r",
+									"pm.test(\"Status code is 409 (Conflict) as \" + userId + \" already exists\", function () {        \r",
+									"    pm.response.to.have.status(409);    \r",
+									"});\r",
+									"\r",
+									"// Email required validation test\r",
+									"pm.test(\"User Id already exists\", function () {\r",
+									"    var jsonData = pm.response.json();    \r",
+									"    var errorsProp = jsonData.to.include(\"already exists\");\r",
+									"});  "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -156,6 +178,34 @@
 				},
 				{
 					"name": "Update User - A",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 due to missing email\", function () {\r",
+									"    pm.response.to.have.status(400);    \r",
+									"    });\r",
+									"\r",
+									"// Test that the response contains validation errors for 'Email'\r",
+									"pm.test(\"Response contains Email validation error\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    \r",
+									"    // Check that the 'errors' property exists\r",
+									"    pm.expect(jsonData).to.have.property(\"model.Email\");\r",
+									"    \r",
+									"    // Check that the 'Email' error exists and contains a 'required' message\r",
+									"    pm.expect(jsonData[\"model.Email\"]).to.have.property(\"errors\");\r",
+									"    var errorsProp = jsonData[\"model.Email\"].errors;\r",
+									"    pm.expect(errorsProp[0]).to.have.property(\"errorMessage\");\r",
+									"    //pm.expect(jsonData.errors.Email[0]).to.include(\"required\");\r",
+									"});    "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],

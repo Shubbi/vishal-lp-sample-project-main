@@ -6,6 +6,7 @@ using BusinessEntities;
 using Core.Services.Users;
 using WebApi.Models.Users;
 
+
 namespace WebApi.Controllers
 {
     [RoutePrefix("users")]
@@ -28,21 +29,36 @@ namespace WebApi.Controllers
         [HttpPost]
         public HttpResponseMessage CreateUser(Guid userId, [FromBody] UserModel model)
         {
-            var user = _createUserService.Create(userId, model.Name, model.Email, model.Type, model.AnnualSalary, model.Tags);
-            return Found(new UserData(user));
+            if (!ModelState.IsValid)
+            {
+                return BadRequestError(ModelState);
+            }   
+
+            var user = _getUserService.GetUser(userId);
+            if (user != null)
+            {
+                return ConflictError($"User {userId} already exists");
+            }
+            user = _createUserService.Create(userId, model.Name, model.Email, model.Type, model.AnnualSalary, model.Tags);
+            return Success(new UserData(user));
         }
 
         [Route("{userId:guid}/update")]
         [HttpPost]
         public HttpResponseMessage UpdateUser(Guid userId, [FromBody] UserModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequestError(ModelState);
+            }
+
             var user = _getUserService.GetUser(userId);
             if (user == null)
             {
                 return DoesNotExist();
             }
             _updateUserService.Update(user, model.Name, model.Email, model.Type, model.AnnualSalary, model.Tags);
-            return Found(new UserData(user));
+            return Success(new UserData(user));
         }
 
         [Route("{userId:guid}/delete")]
@@ -55,7 +71,7 @@ namespace WebApi.Controllers
                 return DoesNotExist();
             }
             _deleteUserService.Delete(user);
-            return Found();
+            return Success();
         }
 
         [Route("{userId:guid}")]
@@ -63,7 +79,7 @@ namespace WebApi.Controllers
         public HttpResponseMessage GetUser(Guid userId)
         {
             var user = _getUserService.GetUser(userId);
-            return Found(new UserData(user));
+            return Success(new UserData(user));
         }
 
         [Route("list")]
@@ -74,7 +90,7 @@ namespace WebApi.Controllers
                                        .Skip(skip).Take(take)
                                        .Select(q => new UserData(q))
                                        .ToList();
-            return Found(users);
+            return Success(users);
         }
 
         [Route("clear")]
@@ -82,14 +98,15 @@ namespace WebApi.Controllers
         public HttpResponseMessage DeleteAllUsers()
         {
             _deleteUserService.DeleteAll();
-            return Found();
+            return Success();
         }
 
         [Route("list/tag")]
         [HttpGet]
         public HttpResponseMessage GetUsersByTag(string tag)
         {
-            throw new NotImplementedException();
+            var users = _getUserService.GetUsers(tag);
+            return Success(users);
         }
     }
 }

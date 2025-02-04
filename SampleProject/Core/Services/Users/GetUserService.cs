@@ -20,6 +20,11 @@ namespace Core.Services.Users
         {
             return _userRepository.Get(id);
         }
+        
+        public IEnumerable<User> GetUsers(string tag)
+        {
+            return _userRepository.Get(tag);
+        }
 
         public IEnumerable<User> GetUsers(UserTypes? userType = null, string name = null, string email = null)
         {

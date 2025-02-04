@@ -14,7 +14,9 @@ namespace Data.Indexes
                                   {
                                       user.Name,
                                       user.Email,
-                                      user.Type
+                                      user.Type,
+                                      //Added Tags to index, but I'm not sure if it a good strategy.
+                                      user.Tags 
                                   };
 
             Index(x => x.Type, FieldIndexing.NotAnalyzed);

@@ -12,7 +12,9 @@ namespace Core.Services.Users
             user.SetEmail(email);
             user.SetName(name);
             user.SetType(type);
-            user.SetMonthlySalary(annualSalary.Value / 12);
+
+            //Here 0m was a viable alternative. But since in the design we have kept annulaSalary as nullable, so checking for null and dividing by 12 only when it's not null 
+            user.SetMonthlySalary(annualSalary.HasValue ? annualSalary.Value / 12 : annualSalary);
             user.SetTags(tags);
         }
     }

@@ -8,6 +8,8 @@ namespace Core.Services.Users
     {
         User GetUser(Guid id);
 
+        IEnumerable<User> GetUsers(string tag);
+
         IEnumerable<User> GetUsers(UserTypes? userType = null, string name = null, string email = null);
     }
 }
