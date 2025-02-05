@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Core.Services.Products
 {
-    public interface IGetProductService
+    public interface IDeleteProductService
     {
-        Product GetProduct(Guid id);
-        IEnumerable<Product> GetProducts();
+        void Delete(Product product);
+        void DeleteAll();
     }
 }

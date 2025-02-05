@@ -23,5 +23,10 @@ namespace Core.Services.Products
         {
             return _unitOfWork.Products.Get(id);
         }
+
+        public IEnumerable<Product> GetProducts()
+        {
+            return _unitOfWork.Products.GetAll();
+        }
     }
 }

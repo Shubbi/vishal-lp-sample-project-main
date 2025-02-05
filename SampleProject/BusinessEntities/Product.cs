@@ -20,7 +20,9 @@ namespace BusinessEntities
                 
             set 
             { 
-                if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("Name was not provided");
+                if (string.IsNullOrWhiteSpace(value)) 
+                    throw new ArgumentException("Name was not provided");
+                _name = value;
             } 
         }
 
@@ -32,7 +34,10 @@ namespace BusinessEntities
             }
             set
             {
-                if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("Description was not provided");
+                if (string.IsNullOrWhiteSpace(value)) 
+                    throw new ArgumentException("Description was not provided");
+
+                _description = value;
             }
         }
 
@@ -46,6 +51,7 @@ namespace BusinessEntities
             {
                 if (value <= 0m)
                     throw new ArgumentException("Price should be greater than 0");
+                _price = value;
             }
         }
 
@@ -59,6 +65,7 @@ namespace BusinessEntities
             {
                 if (value < 0)
                     throw new ArgumentException("Stock Quantity cannot be negative");
+                _stockQuantity = value;
             }
         }
     }

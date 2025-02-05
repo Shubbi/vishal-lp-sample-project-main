@@ -1,4 +1,5 @@
-﻿using Core.Services.Products;
+﻿using BusinessEntities;
+using Core.Services.Products;
 using Core.Services.Users;
 using Data.Repositories.InMemory;
 using System;
@@ -17,11 +18,16 @@ namespace WebApi.Controllers
     {
         private readonly ICreateProductService _createProductService;
         private readonly IGetProductService _getProductService;
+        private readonly IDeleteProductService _deleteProductService;
 
-        public ProductController(ICreateProductService createProductService, IGetProductService getProductService, IUnitOfWork unitOfWork)
+        public ProductController(
+            ICreateProductService createProductService, 
+            IGetProductService getProductService, 
+            IDeleteProductService deleteProductService)
         {
             _createProductService = createProductService;      
             _getProductService = getProductService;
+            _deleteProductService = deleteProductService;
         }
 
         [Route("{productId:guid}/create")]
@@ -49,7 +55,45 @@ namespace WebApi.Controllers
         public HttpResponseMessage GetProduct(Guid productId)
         {
             var product = _getProductService.GetProduct(productId);
-            return Success(new ProductData(product));
+
+            if (product != null)
+            {
+                return Success(new ProductData(product));
+            }
+
+            return DoesNotExist();
+        }
+
+        [Route("list")]
+        [HttpGet]
+        public HttpResponseMessage GetProducts()
+        {
+            var products = _getProductService.GetProducts();
+
+            return Success(products);
+        }
+
+        [Route("{productId:guid}/delete")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteProduct(Guid productId)
+        {
+            var product = _getProductService.GetProduct(productId);
+
+            if (product != null)
+            {
+                _deleteProductService.Delete(product);
+                return Success();
+            }
+            
+            return DoesNotExist();
+        }
+
+        [Route("clear")]
+        [HttpDelete]
+        public HttpResponseMessage DeleteAllProducts()
+        {
+            _deleteProductService.DeleteAll();
+            return Success();
         }
     }
 }

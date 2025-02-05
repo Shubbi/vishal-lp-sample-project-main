@@ -15,7 +15,6 @@ namespace Core.Services.Products
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IIdObjectFactory<Product> _productFactory;
-        private readonly IProductRepository _productRepository;
 
         public CreateProductService(IIdObjectFactory<Product> productFactory, IUnitOfWork unitOfWork)
         {

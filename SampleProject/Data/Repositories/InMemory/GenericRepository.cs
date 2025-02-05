@@ -27,6 +27,11 @@ namespace Data.Repositories.InMemory
             }
         }
 
+        public void DeleteAll()
+        {
+            _items.Clear(); 
+        }
+
         public T Get(Guid id)
         {
             return _items.FirstOrDefault(e => id == e.Id);

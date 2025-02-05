@@ -9,6 +9,7 @@ namespace Data.Repositories.InMemory
     {
         void Add(T entity);
         void Delete(Guid id);
+        void DeleteAll();
         T Get(Guid id);
         IEnumerable<T> GetAll();
         void Update(T entity);

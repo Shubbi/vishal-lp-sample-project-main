@@ -79,6 +79,12 @@ namespace WebApi.Controllers
         public HttpResponseMessage GetUser(Guid userId)
         {
             var user = _getUserService.GetUser(userId);
+
+            if (user == null)
+            {
+                return DoesNotExist();
+            }
+
             return Success(new UserData(user));
         }
 
@@ -106,6 +112,7 @@ namespace WebApi.Controllers
         public HttpResponseMessage GetUsersByTag(string tag)
         {
             var users = _getUserService.GetUsers(tag);
+
             return Success(users);
         }
     }
