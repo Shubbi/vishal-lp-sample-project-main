@@ -22,9 +22,9 @@ namespace Core.Services.Products
             _unitOfWork = unitOfWork;
         }
 
-        public Product Create(Guid id, string productName, string productDescription, decimal price, int stockQuantity)
+        public Product Create(string productName, string productDescription, decimal price, int stockQuantity)
         {
-            var product = _productFactory.Create(id);
+            var product = _productFactory.Create(Guid.NewGuid());
             product.Name = productName;
             product.Description = productDescription;
             product.Price = price;

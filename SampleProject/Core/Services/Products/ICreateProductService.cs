@@ -7,6 +7,6 @@ namespace Core.Services.Products
 {
     public interface ICreateProductService
     {
-        Product Create(Guid id, string productName, string productDescription, decimal price,int stockQuantity);
+        Product Create(string productName, string productDescription, decimal price,int stockQuantity);
     }
 }

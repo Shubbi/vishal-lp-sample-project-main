@@ -36,9 +36,9 @@ namespace WebApi.Controllers
         //ToDo - Implement Authorization to ensure that only Admin can access this
         //Maybe - moving it to an Admin controller might be a good idea
 
-        [Route("{productId:guid}/create")]
+        [Route("create")]
         [HttpPost]
-        public HttpResponseMessage CreateProduct(Guid productId, [FromBody] ProductModel model)
+        public HttpResponseMessage CreateProduct([FromBody] ProductModel model)
         {
 
             if (!ModelState.IsValid)
@@ -46,13 +46,7 @@ namespace WebApi.Controllers
                 return BadRequestError(ModelState);
             }
 
-            var product = _getProductService.GetProduct(productId);
-            if (product != null)
-            {
-                return ConflictError($"product {productId} already exists");
-            }
-
-            product = _createProductService.Create(productId, model.ProductName, model.ProductDescription, model.Price, model.StockQuantity);
+            var product = _createProductService.Create(model.ProductName, model.ProductDescription, model.Price, model.StockQuantity);
             return Success(new ProductData(product));
         }
 

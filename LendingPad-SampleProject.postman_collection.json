@@ -330,14 +330,14 @@
 					"name": "Products",
 					"item": [
 						{
-							"name": "Create Product",
+							"name": "Create Product - 1",
 							"event": [
 								{
 									"listen": "prerequest",
 									"script": {
 										"exec": [
-											"var uuid = require('uuid');\r",
-											"pm.globals.set(\"newProductId\", uuid.v4());"
+											"\r",
+											""
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -347,6 +347,9 @@
 									"listen": "test",
 									"script": {
 										"exec": [
+											"\r",
+											"let responseData = pm.response.json();\r",
+											"pm.globals.set(\"newProductId1\", responseData.id);\r",
 											"\r",
 											"pm.test(\"Status code is 200\", function () {\r",
 											"    pm.response.to.have.status(200);\r",
@@ -373,7 +376,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:49834/products/{{newProductId}}/create",
+									"raw": "http://localhost:49834/products/create",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -381,7 +384,6 @@
 									"port": "49834",
 									"path": [
 										"products",
-										"{{newProductId}}",
 										"create"
 									]
 								}
@@ -389,7 +391,96 @@
 							"response": []
 						},
 						{
-							"name": "Get Product By Id",
+							"name": "Create Product - 2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let responseData = pm.response.json();\r",
+											"pm.globals.set(\"newProductId2\", responseData.id);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"productName\": \"Samsung Speakers\",\r\n    \"productDescription\": \"5.1 Surround Sound With Woofer\",\r\n    \"price\": 888.99,\r\n    \"stockQuantity\": 200\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:49834/products/create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "49834",
+									"path": [
+										"products",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Request",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"productName\": \"Samsung QUHD TV \",\r\n    \"productDescription\": \"65 inch Televisoion\",\r\n    \"price\": 550.75,\r\n    \"stockQuantity\": 100\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:49834/products/{{newProductId1}}/update",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "49834",
+									"path": [
+										"products",
+										"{{newProductId1}}",
+										"update"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Product - 1 - By Id",
 							"event": [
 								{
 									"listen": "test",
@@ -402,13 +493,20 @@
 										"type": "text/javascript",
 										"packages": {}
 									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"packages": {},
+										"type": "text/javascript"
+									}
 								}
 							],
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:49834/products/{{newProductId}}/",
+									"raw": "http://localhost:49834/products/{{newProductId1}}/",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -416,7 +514,52 @@
 									"port": "49834",
 									"path": [
 										"products",
-										"{{newProductId}}",
+										"{{newProductId1}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Product - 2 - By Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200 or 404\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([200,404])\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:49834/products/{{newProductId2}}/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "49834",
+									"path": [
+										"products",
+										"{{newProductId2}}",
 										""
 									]
 								}
@@ -458,7 +601,7 @@
 							"response": []
 						},
 						{
-							"name": "Delete Product",
+							"name": "Delete Product - 1",
 							"event": [
 								{
 									"listen": "test",
@@ -477,7 +620,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:49834/products/{{newProductId}}/delete",
+									"raw": "http://localhost:49834/products/{{newProductId1}}/delete",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -485,7 +628,42 @@
 									"port": "49834",
 									"path": [
 										"products",
-										"{{newProductId}}",
+										"{{newProductId1}}",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Product - 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200 or 404\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([200,404])\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:49834/products/{{newProductId2}}/delete",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "49834",
+									"path": [
+										"products",
+										"{{newProductId2}}",
 										"delete"
 									]
 								}
@@ -530,7 +708,49 @@
 				},
 				{
 					"name": "Orders",
-					"item": []
+					"item": [
+						{
+							"name": "Place Order",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"customerName\": \"Vishal\",\r\n    \"customerAddress\": \"Street City State 1234\",\r\n    \"customerEmail\": \"vishal@company123.com\",\r\n    \"shippingAddress\": \"Street City State 1234\",\r\n    \"orderItems\": [\r\n        {\r\n            \"productId\": \"{{newProductId1}}\",\r\n            \"Quantity\": 5\r\n        },\r\n        {\r\n            \"productId\": \"{{newProductId2}}\",\r\n            \"Quantity\": 2\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:49834/orders/create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "49834",
+									"path": [
+										"orders",
+										"create"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}

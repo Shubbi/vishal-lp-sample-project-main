@@ -14,6 +14,11 @@ namespace Core.Services.Products
         }
         public void Update(Product product, string productName, string productDescription, decimal price, int stockQuantity)
         {
+            product.Name = productName;
+            product.Description = productDescription;
+            product.Price = price;
+            product.StockQuantity = stockQuantity;
+
             _unitOfWork.Products.Update(product);
             _unitOfWork.Save();
         }
