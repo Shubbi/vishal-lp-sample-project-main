@@ -2,6 +2,7 @@
 using Common;
 using Core.DTOs;
 using Core.Factories;
+using Core.Services.Customers;
 using Data.Repositories.InMemory;
 using System;
 using System.Collections.Generic;
@@ -9,36 +10,45 @@ using System.Collections.Generic;
 namespace Core.Services.Orders
 {
     [AutoRegister(AutoRegisterTypes.Scope)]
-    public class OrderService : IOrderService
+    public class CreateOrderService : ICreateOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IIdObjectFactory<Order> _orderFactory;
-        private readonly IIdObjectFactory<Customer> _customerFactory;
+        private readonly IIdObjectFactory<Order> _orderFactory;        
         private readonly IIdObjectFactory<OrderItem> _itemFactory;
+        private readonly IGetCustomerService _getCustomerService;
+        private readonly ICreateCustomerService _createCustomerService;
 
-        public OrderService(
+        public CreateOrderService(
             IUnitOfWork unitOfWork,
             IIdObjectFactory<Order> orderFactory,
-            IIdObjectFactory<Customer> customerFactory,
-            IIdObjectFactory<OrderItem> itemFactory
+            IIdObjectFactory<OrderItem> itemFactory,
+            IGetCustomerService getCustomerService,
+            ICreateCustomerService createCustomerService
             )
         {
             _unitOfWork = unitOfWork;
             _orderFactory = orderFactory;
-            _customerFactory = customerFactory;
             _itemFactory = itemFactory;
+            _getCustomerService = getCustomerService;
+            _createCustomerService = createCustomerService;
         }
 
         //Sorry I'm violating Single Responsibility principle
         //As I'm also creating customer and orderitem here
         //Ideally I should do them in their own service      
-        public OrderResponseDto PlaceOrder(OrderRequestDto orderRequest)
+        public OrderResponseDto CreateOrder(OrderRequestDto orderRequest)
         {
-            Customer customer = CheckAndCreateCustomer(orderRequest);
+            User customer = ProcessCustomer(orderRequest);
+
+            if (customer == null)
+            {
+                throw new Exception("Problem processing Customer Data");
+            }
 
             var orderId = Guid.NewGuid();
             var order = _orderFactory.Create(orderId);
             order.Customer = customer;
+            order.CustomerId = customer.Id;
 
             foreach (var item in orderRequest.OrderItems)
             {
@@ -50,7 +60,7 @@ namespace Core.Services.Orders
             _unitOfWork.Orders.Add(order);
             _unitOfWork.Save();
 
-            OrderResponseDto orderResponseDto = GetOrderResponseDto(orderId, order);
+            OrderResponseDto orderResponseDto = OrderResponseDto.GetOrderResponseDto(order);
 
             return orderResponseDto;
         }
@@ -80,47 +90,16 @@ namespace Core.Services.Orders
             order.Items.Add(orderItem);
         }
 
-        private Customer CheckAndCreateCustomer(OrderRequestDto orderRequest)
+        private User ProcessCustomer(OrderRequestDto orderRequest)
         {
-            var customer = _unitOfWork.Customers.GetCustomerByEmail(orderRequest.CustomerEmail);
+            var customer = _getCustomerService.GetCustomer(orderRequest.CustomerEmail);
 
             if (customer == null)
             {
-                var customerId = Guid.NewGuid();
-
-                customer = _customerFactory.Create(customerId);
-                customer.Address = orderRequest.CustomerAddress;
-                customer.SetEmail(orderRequest.CustomerEmail);
-                customer.SetName(orderRequest.CustomerName);
-
-                _unitOfWork.Customers.Add(customer);
+                customer = _createCustomerService.CreateCustomer(orderRequest.CustomerName, orderRequest.CustomerEmail);
             }
 
             return customer;
-        }
-
-        private static OrderResponseDto GetOrderResponseDto(Guid orderId, Order order)
-        {
-            var orderResponseDto = new OrderResponseDto()
-            {
-                OrderId = orderId,
-                CustomerId = order.Customer.Id,
-                CustomerName = order.Customer.Name,
-                OrderTotal = order.TotalPrice
-            };
-
-            order.Items.ForEach(x =>
-            {
-                orderResponseDto.Items.Add(new OrderItemResponseDto
-                {
-                    ProductId = x.ProductId,
-                    ProductName = x.ProductName,
-                    ProductPrice = x.ProductPrice,
-                    ProductQuantity = x.Quantity,
-                    TotalItemPrice = x.TotalPrice()
-                });
-            });
-            return orderResponseDto;
         }
     }
 }

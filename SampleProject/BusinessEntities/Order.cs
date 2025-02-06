@@ -13,7 +13,7 @@ namespace BusinessEntities
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public List<OrderItem> Items { get; set;} = new List<OrderItem>();
         public Guid CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        public User Customer { get; set; }
 
         //Keeping it simple for now
         public string ShippingAddress { get; set; }

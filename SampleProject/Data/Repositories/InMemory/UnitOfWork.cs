@@ -19,19 +19,15 @@ namespace Data.Repositories.InMemory
 
         public IOrderItemRepository OrderItems { get; }
 
-        public ICustomerRepository Customers { get; }
-
         public UnitOfWork(
             IProductRepository productRepository, 
             IOrderRepository orderRepository,
-            IOrderItemRepository orderItemRepository,
-            ICustomerRepository customerRepository
+            IOrderItemRepository orderItemRepository
             )
         {
             Products = productRepository;
             Orders = orderRepository;
             OrderItems = orderItemRepository;
-            Customers = customerRepository;
         }
 
         public void Save()

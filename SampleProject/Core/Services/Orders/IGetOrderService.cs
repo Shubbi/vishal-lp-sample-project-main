@@ -1,13 +1,13 @@
 ﻿using BusinessEntities;
-using Core.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Core.Services.Orders
 {
-    public interface IOrderService
+    public interface IGetOrderService
     {
-        OrderResponseDto PlaceOrder(OrderRequestDto orderRequest);
+        Order GetOrder(Guid id);
+        IEnumerable<Order> GetOrders();
     }
 }

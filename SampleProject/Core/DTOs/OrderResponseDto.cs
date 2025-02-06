@@ -1,5 +1,7 @@
-﻿using System;
+﻿using BusinessEntities;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Core.DTOs
@@ -11,15 +13,33 @@ namespace Core.DTOs
         public Guid CustomerId { get; set; }
         public string CustomerName { get; set; }
         public List<OrderItemResponseDto> Items { get; } = new List<OrderItemResponseDto>();
-    }
 
-    public class OrderItemResponseDto
-    {
-        public Guid ProductId { get; set; }
-        public string ProductName { get; set; }
-        public decimal ProductPrice { get; set; }
-        public int ProductQuantity { get; set; }
-        public decimal TotalItemPrice { get; set; }
+        public static OrderResponseDto GetOrderResponseDto(Order order)
+        {
+            if(order == null || order.Items == null || !order.Items.Any())
+                return null;
 
+            var orderResponseDto = new OrderResponseDto()
+            {
+                OrderId = order.Id,
+                CustomerId = order.Customer.Id,
+                CustomerName = order.Customer.Name,
+                OrderTotal = order.TotalPrice
+            };
+
+            order.Items.ForEach(x =>
+            {
+                orderResponseDto.Items.Add(new OrderItemResponseDto
+                {
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    ProductPrice = x.ProductPrice,
+                    ProductQuantity = x.Quantity,
+                    TotalItemPrice = x.TotalPrice()
+                });
+            });
+
+            return orderResponseDto;
+        }
     }
 }

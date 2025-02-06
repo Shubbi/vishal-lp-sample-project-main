@@ -8,8 +8,7 @@ namespace Data.Repositories.InMemory
     {
         IProductRepository Products { get; }
         IOrderRepository Orders { get; }
-        IOrderItemRepository OrderItems { get; }
-        ICustomerRepository Customers { get; }
+        IOrderItemRepository OrderItems { get; }        
 
         void Save();
     }
