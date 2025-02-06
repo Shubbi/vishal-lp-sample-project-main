@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Core.Services.Products
 {
-    [AutoRegister(AutoRegisterTypes.Singleton)]
+    [AutoRegister(AutoRegisterTypes.Scope)]
     public class DeleteProductService : IDeleteProductService
     {
         private readonly IUnitOfWork _unitOfWork;

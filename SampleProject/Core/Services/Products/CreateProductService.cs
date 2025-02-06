@@ -8,9 +8,7 @@ using System.Text;
 
 namespace Core.Services.Products
 {
-    //Registering as singleton because it is in memory
-    //For Databases we will make it Transient
-    [AutoRegister(AutoRegisterTypes.Singleton)]
+    [AutoRegister(AutoRegisterTypes.Scope)]
     public class CreateProductService : ICreateProductService
     {
         private readonly IUnitOfWork _unitOfWork;

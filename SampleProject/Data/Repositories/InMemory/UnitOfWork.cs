@@ -9,7 +9,7 @@ namespace Data.Repositories.InMemory
     //But is useful if we use db
 
     //Registering as singleton because it is in memory
-    //For Databases we will make it Transient
+    //For Databases we will make it Scoped
     [AutoRegister(AutoRegisterTypes.Singleton)]
     public class UnitOfWork : IUnitOfWork
     {

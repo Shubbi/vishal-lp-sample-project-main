@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Core.Services.Orders
 {
-    [AutoRegister(AutoRegisterTypes.Singleton)]
+    [AutoRegister(AutoRegisterTypes.Scope)]
     public class OrderService : IOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
