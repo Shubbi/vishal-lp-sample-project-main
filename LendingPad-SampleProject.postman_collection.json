@@ -365,7 +365,13 @@
 									"type": "noauth"
 								},
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "UserId",
+										"value": "{{AdminIdForAuthorization}}",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"productName\": \"Samsung TV\",\r\n    \"productDescription\": \"65 inch Televisoion\",\r\n    \"price\": 550.75,\r\n    \"stockQuantity\": 100\r\n}",
@@ -450,10 +456,72 @@
 							"response": []
 						},
 						{
-							"name": "Update Request",
+							"name": "Create Product - 3 UnAuthorized",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
 							"request": {
+								"auth": {
+									"type": "noauth"
+								},
 								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"productName\": \"X Box S\",\r\n    \"productDescription\": \"Gamin Console from Microsoft\",\r\n    \"price\": 765.75,\r\n    \"stockQuantity\": 32\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:49834/products/create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "49834",
+									"path": [
+										"products",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Product",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "UserId",
+										"value": "{{AdminIdForAuthorization}}",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"productName\": \"Samsung QUHD TV \",\r\n    \"productDescription\": \"65 inch Televisoion\",\r\n    \"price\": 550.75,\r\n    \"stockQuantity\": 100\r\n}",
@@ -636,14 +704,14 @@
 							"response": []
 						},
 						{
-							"name": "Delete Product - 2",
+							"name": "Delete Product - 2 - UnAuthorized",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Status code is 200 or 404\", function () {\r",
-											"    pm.expect(pm.response.code).to.be.oneOf([200,404])\r",
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
 											"});"
 										],
 										"type": "text/javascript",

@@ -92,5 +92,20 @@ namespace WebApi.Controllers
 
             return Success(new List<OrderResponseDto>());
         }
+        
+        [Route("list")]
+        [HttpGet]
+        public HttpResponseMessage GetOrdersForACustomer()
+        {
+            var orders = _getOrderService.GetOrders();
+
+            if (orders != null && orders.Any())
+            {
+                var orderResponse = orders.Select(x => OrderResponseDto.GetOrderResponseDto(x));
+                return Success(orders);
+            }
+
+            return Success(new List<OrderResponseDto>());
+        }
     }
 }

@@ -1,18 +1,12 @@
-﻿using BusinessEntities;
-using Core.Services.Products;
-using Core.Services.Users;
-using Data.Repositories.InMemory;
+﻿using Core.Services.Products;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebApi.Filters;
 using WebApi.Models.Products;
-using WebApi.Models.Users;
 
 namespace WebApi.Controllers
-{
+{    
     [RoutePrefix("products")]
     public class ProductController : BaseApiController
     {
@@ -32,10 +26,8 @@ namespace WebApi.Controllers
             _getProductService = getProductService;
             _deleteProductService = deleteProductService;
         }
-
-        //ToDo - Implement Authorization to ensure that only Admin can access this
-        //Maybe - moving it to an Admin controller might be a good idea
-
+        
+        [CustomAuthFilter("Admin")]
         [Route("create")]
         [HttpPost]
         public HttpResponseMessage CreateProduct([FromBody] ProductModel model)
@@ -73,8 +65,7 @@ namespace WebApi.Controllers
             return Success(products);
         }
 
-        //ToDo - Implement Authorization to ensure that only Admin can access this
-        //Maybe - moving it to an Admin controller might be a good idea
+        [CustomAuthFilter("Admin")]
         [Route("{productId:guid}/update")]
         [HttpPost]
         public HttpResponseMessage UpdateProduct(Guid productId, [FromBody] ProductModel model)
@@ -95,8 +86,7 @@ namespace WebApi.Controllers
             return Success(new ProductData(product));
         }
 
-        //ToDo - Implement Authorization to ensure that only Admin can access this
-        //Maybe - moving it to an Admin controller might be a good idea
+        [CustomAuthFilter("Admin")]
         [Route("{productId:guid}/delete")]
         [HttpDelete]
         public HttpResponseMessage DeleteProduct(Guid productId)
@@ -112,8 +102,7 @@ namespace WebApi.Controllers
             return DoesNotExist();
         }
 
-        //ToDo - Implement Authorization to ensure that only Admin can access this
-        //Maybe - moving it to an Admin controller might be a good idea
+        [CustomAuthFilter("Admin")]
         [Route("clear")]
         [HttpDelete]
         public HttpResponseMessage DeleteAllProducts()
