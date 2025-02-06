@@ -11,6 +11,9 @@ namespace BusinessEntities
         private decimal _price;
         private int _stockQuantity;
 
+        //I could have added Cost also which would allow company
+        //to calculate profit or loss
+        //but I'm chosing not to for the sake of simplicity
 
         public string Name {
             get
