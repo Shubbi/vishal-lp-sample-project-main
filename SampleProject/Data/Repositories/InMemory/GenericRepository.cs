@@ -20,7 +20,7 @@ namespace Data.Repositories.InMemory
 
         public void Delete(Guid id)
         {
-            var entity = _items.FirstOrDefault(e => id == e.Id);
+            var entity = _items.FirstOrDefault(e => e.Id == id);
             if (entity != null)
             {
                 _items.Remove(entity);
@@ -34,7 +34,7 @@ namespace Data.Repositories.InMemory
 
         public T Get(Guid id)
         {
-            return _items.FirstOrDefault(e => id == e.Id);
+            return _items.FirstOrDefault(e => e.Id == id);
         }
 
         public IEnumerable<T> GetAll()

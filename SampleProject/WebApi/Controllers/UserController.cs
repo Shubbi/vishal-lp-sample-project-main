@@ -9,6 +9,7 @@ using WebApi.Models.Users;
 
 namespace WebApi.Controllers
 {
+    //ToDo - Implement Authorization to ensure that only Admin can access this
     [RoutePrefix("users")]
     public class UserController : BaseApiController
     {

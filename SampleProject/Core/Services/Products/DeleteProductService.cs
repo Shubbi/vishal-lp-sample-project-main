@@ -12,11 +12,9 @@ namespace Core.Services.Products
     public class DeleteProductService : IDeleteProductService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IIdObjectFactory<Product> _productFactory;
 
-        public DeleteProductService(IIdObjectFactory<Product> productFactory, IUnitOfWork unitOfWork)
+        public DeleteProductService(IUnitOfWork unitOfWork)
         {
-            _productFactory = productFactory;
             _unitOfWork = unitOfWork;
         }
 

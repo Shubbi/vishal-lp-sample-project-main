@@ -17,10 +17,21 @@ namespace Data.Repositories.InMemory
 
         public IOrderRepository Orders { get; }
 
-        public UnitOfWork(IProductRepository productRepository, IOrderRepository orderRepository)
+        public IOrderItemRepository OrderItems { get; }
+
+        public ICustomerRepository Customers { get; }
+
+        public UnitOfWork(
+            IProductRepository productRepository, 
+            IOrderRepository orderRepository,
+            IOrderItemRepository orderItemRepository,
+            ICustomerRepository customerRepository
+            )
         {
             Products = productRepository;
             Orders = orderRepository;
+            OrderItems = orderItemRepository;
+            Customers = customerRepository;
         }
 
         public void Save()

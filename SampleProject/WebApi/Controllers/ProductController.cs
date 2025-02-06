@@ -17,18 +17,24 @@ namespace WebApi.Controllers
     public class ProductController : BaseApiController
     {
         private readonly ICreateProductService _createProductService;
+        private readonly IUpdateProductService _updateProductService;
         private readonly IGetProductService _getProductService;
         private readonly IDeleteProductService _deleteProductService;
 
         public ProductController(
             ICreateProductService createProductService, 
+            IUpdateProductService updateProductService,
             IGetProductService getProductService, 
             IDeleteProductService deleteProductService)
         {
-            _createProductService = createProductService;      
+            _createProductService = createProductService;
+            _updateProductService = updateProductService;
             _getProductService = getProductService;
             _deleteProductService = deleteProductService;
         }
+
+        //ToDo - Implement Authorization to ensure that only Admin can access this
+        //Maybe - moving it to an Admin controller might be a good idea
 
         [Route("{productId:guid}/create")]
         [HttpPost]
@@ -73,6 +79,30 @@ namespace WebApi.Controllers
             return Success(products);
         }
 
+        //ToDo - Implement Authorization to ensure that only Admin can access this
+        //Maybe - moving it to an Admin controller might be a good idea
+        [Route("{productId:guid}/update")]
+        [HttpPost]
+        public HttpResponseMessage UpdateProduct(Guid productId, [FromBody] ProductModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequestError(ModelState);
+            }
+
+            var product = _getProductService.GetProduct(productId);
+
+            if (product == null)
+            {
+                return DoesNotExist();
+            }
+
+            _updateProductService.Update(product, model.ProductName, model.ProductDescription, model.Price, model.StockQuantity);
+            return Success(new ProductData(product));
+        }
+
+        //ToDo - Implement Authorization to ensure that only Admin can access this
+        //Maybe - moving it to an Admin controller might be a good idea
         [Route("{productId:guid}/delete")]
         [HttpDelete]
         public HttpResponseMessage DeleteProduct(Guid productId)
@@ -88,6 +118,8 @@ namespace WebApi.Controllers
             return DoesNotExist();
         }
 
+        //ToDo - Implement Authorization to ensure that only Admin can access this
+        //Maybe - moving it to an Admin controller might be a good idea
         [Route("clear")]
         [HttpDelete]
         public HttpResponseMessage DeleteAllProducts()
