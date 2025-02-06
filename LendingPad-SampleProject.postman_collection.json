@@ -710,13 +710,28 @@
 					"name": "Orders",
 					"item": [
 						{
-							"name": "Place Order",
+							"name": "Place Order - 1",
 							"event": [
 								{
 									"listen": "prerequest",
 									"script": {
 										"exec": [
 											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let responseData = pm.response.json();\r",
+											"pm.globals.set(\"newOrderId1\", responseData.orderId);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -728,7 +743,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"customerName\": \"Vishal\",\r\n    \"customerAddress\": \"Street City State 1234\",\r\n    \"customerEmail\": \"vishal@company123.com\",\r\n    \"shippingAddress\": \"Street City State 1234\",\r\n    \"orderItems\": [\r\n        {\r\n            \"productId\": \"{{newProductId1}}\",\r\n            \"Quantity\": 5\r\n        },\r\n        {\r\n            \"productId\": \"{{newProductId2}}\",\r\n            \"Quantity\": 2\r\n        }\r\n    ]\r\n}",
+									"raw": "{\r\n    \"customerName\": \"Vishal123\",\r\n    \"customerAddress\": \"Street City State 1234\",\r\n    \"customerEmail\": \"vishal123@company123.com\",\r\n    \"shippingAddress\": \"Street City State 1234\",\r\n    \"orderItems\": [\r\n        {\r\n            \"productId\": \"{{newProductId1}}\",\r\n            \"Quantity\": 5\r\n        },\r\n        {\r\n            \"productId\": \"{{newProductId2}}\",\r\n            \"Quantity\": 2\r\n        }\r\n    ]\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -745,6 +760,151 @@
 									"path": [
 										"orders",
 										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Place Order - 2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let responseData = pm.response.json();\r",
+											"pm.globals.set(\"newOrderId2\", responseData.orderId);\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"customerName\": \"Vishal123\",\r\n    \"customerAddress\": \"Street City State 1234\",\r\n    \"customerEmail\": \"vishal123@company123.com\",\r\n    \"shippingAddress\": \"Street City State 1234\",\r\n    \"orderItems\": [\r\n        {\r\n            \"productId\": \"{{newProductId1}}\",\r\n            \"Quantity\": 5\r\n        },\r\n        {\r\n            \"productId\": \"{{newProductId2}}\",\r\n            \"Quantity\": 2\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:49834/orders/create",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "49834",
+									"path": [
+										"orders",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Order - 1 - By Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:49834/orders/{{newOrderId1}}/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "49834",
+									"path": [
+										"orders",
+										"{{newOrderId1}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Order - 2 - By Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let responseData = pm.response.json();\r",
+											"pm.globals.set(\"newOrderId2\", responseData.orderId);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:49834/orders/{{newOrderId2}}/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "49834",
+									"path": [
+										"orders",
+										"{{newOrderId2}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List All Orders",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:49834/orders/list",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "49834",
+									"path": [
+										"orders",
+										"list"
 									]
 								}
 							},
