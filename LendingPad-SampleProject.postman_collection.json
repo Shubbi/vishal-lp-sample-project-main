@@ -430,7 +430,13 @@
 									"type": "noauth"
 								},
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "UserId",
+										"value": "{{AdminIdForAuthorization}}",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"productName\": \"Samsung Speakers\",\r\n    \"productDescription\": \"5.1 Surround Sound With Woofer\",\r\n    \"price\": 888.99,\r\n    \"stockQuantity\": 200\r\n}",
@@ -686,7 +692,13 @@
 							],
 							"request": {
 								"method": "DELETE",
-								"header": [],
+								"header": [
+									{
+										"key": "UserId",
+										"value": "{{AdminIdForAuthorization}}",
+										"type": "text"
+									}
+								],
 								"url": {
 									"raw": "http://localhost:49834/products/{{newProductId1}}/delete",
 									"protocol": "http",
@@ -756,7 +768,13 @@
 							],
 							"request": {
 								"method": "DELETE",
-								"header": [],
+								"header": [
+									{
+										"key": "UserId",
+										"value": "{{AdminIdForAuthorization}}",
+										"type": "text"
+									}
+								],
 								"url": {
 									"raw": "http://localhost:49834/products/clear",
 									"protocol": "http",
@@ -778,25 +796,752 @@
 					"name": "Orders",
 					"item": [
 						{
-							"name": "Place Order - 1",
-							"event": [
+							"name": "Order1",
+							"item": [
 								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
+									"name": "Place Order - 1",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let responseData = pm.response.json();\r",
+													"pm.globals.set(\"newOrderId1\", responseData.orderId);\r",
+													"pm.globals.set(\"newCustomerId1\", responseData.customerId)\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"customerName\": \"Vishal123\",\r\n    \"customerAddress\": \"Street City State 1234\",\r\n    \"customerEmail\": \"vishal123@company123.com\",\r\n    \"shippingAddress\": \"Street City State 1234\",\r\n    \"orderItems\": [\r\n        {\r\n            \"productId\": \"{{newProductId1}}\",\r\n            \"Quantity\": 5\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:49834/orders/create",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"create"
+											]
+										}
+									},
+									"response": []
 								},
+								{
+									"name": "Order - 1 - Admin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{AdminIdForAuthorization}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "http://localhost:49834/orders/{{newOrderId1}}/",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"{{newOrderId1}}",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update - Delivered - Fail",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{AdminIdForAuthorization}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"orderStatus\": \"Delivered\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:49834/orders/{{newOrderId1}}/update",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"{{newOrderId1}}",
+												"update"
+											],
+											"query": [
+												{
+													"key": "",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update - Processing",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{AdminIdForAuthorization}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"orderStatus\": \"Processing\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:49834/orders/{{newOrderId1}}/update",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"{{newOrderId1}}",
+												"update"
+											],
+											"query": [
+												{
+													"key": "",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update - Shipped",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{AdminIdForAuthorization}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"orderStatus\": \"Shipped\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:49834/orders/{{newOrderId1}}/update",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"{{newOrderId1}}",
+												"update"
+											],
+											"query": [
+												{
+													"key": "",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update - Delivered",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{AdminIdForAuthorization}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"orderStatus\": \"Delivered\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:49834/orders/{{newOrderId1}}/update",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"{{newOrderId1}}",
+												"update"
+											],
+											"query": [
+												{
+													"key": "",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update - ReturnRequested - Customer",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{newCustomerId1}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"orderStatus\": \"ReturnRequested\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:49834/orders/{{newOrderId1}}/update",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"{{newOrderId1}}",
+												"update"
+											],
+											"query": [
+												{
+													"key": "",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update - Returned",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{AdminIdForAuthorization}}",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"orderStatus\": \"Returned\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:49834/orders/{{newOrderId1}}/update",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"{{newOrderId1}}",
+												"update"
+											],
+											"query": [
+												{
+													"key": "",
+													"value": "",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - 1 - Customer",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{newCustomerId1}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "http://localhost:49834/orders/{{newOrderId1}}/",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"{{newOrderId1}}",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ListAllOrdersForCusotmer1 - Admin",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{AdminIdForAuthorization}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "http://localhost:49834/orders/list/{{newCustomerId1}}",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"list",
+												"{{newCustomerId1}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ListAllOrdersForCusotmer1 - Customer",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{newCustomerId1}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "http://localhost:49834/orders/list/{{newCustomerId1}}",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"list",
+												"{{newCustomerId1}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Order2",
+							"item": [
+								{
+									"name": "Place Order - 2 - Customer1",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let responseData = pm.response.json();\r",
+													"pm.globals.set(\"newOrderId2\", responseData.orderId);\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"customerName\": \"Vishal123\",\r\n    \"customerAddress\": \"Street City State 1234\",\r\n    \"customerEmail\": \"vishal123@company123.com\",\r\n    \"shippingAddress\": \"Street City State 1234\",\r\n    \"orderItems\": [\r\n        {\r\n            \"productId\": \"{{newProductId2}}\",\r\n            \"Quantity\": 5\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:49834/orders/create",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"create"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - 2 - By Id",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let responseData = pm.response.json();\r",
+													"pm.globals.set(\"newOrderId2\", responseData.orderId);"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:49834/orders/{{newOrderId2}}/",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"{{newOrderId2}}",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Order3",
+							"item": [
+								{
+									"name": "Place Order - 3 - Multiple Products - New Customer",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										},
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"let responseData = pm.response.json();\r",
+													"pm.globals.set(\"newOrderId3\", responseData.orderId);\r",
+													"pm.globals.set(\"newRandomCustomerId\", responseData.customerId)\r",
+													"\r",
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"customerName\": \"{{$randomFirstName}}\",\r\n    \"customerAddress\": \"{{$randomStreetAddress}} {{$randomCity}}\",\r\n    \"customerEmail\": \"{{$randomEmail}}\",\r\n    \"shippingAddress\": \"{{$randomStreetAddress}} {{$randomCity}}\",\r\n    \"orderItems\": [\r\n        {\r\n            \"productId\": \"{{newProductId1}}\",\r\n            \"Quantity\": 5\r\n        },\r\n        {\r\n            \"productId\": \"{{newProductId2}}\",\r\n            \"Quantity\": 2\r\n        }\r\n    ]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://localhost:49834/orders/create",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"create"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - 3 - Admin",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{AdminIdForAuthorization}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "http://localhost:49834/orders/{{newOrderId1}}/",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"{{newOrderId1}}",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Order - 1 - Different Customer - Fail",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{newRandomCustomerId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "http://localhost:49834/orders/{{newOrderId1}}/",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"{{newOrderId1}}",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ListAllOrdersForCusotmer1 - DiffCustomer Fail",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 401\", function () {\r",
+													"    pm.response.to.have.status(401);\r",
+													"});"
+												],
+												"type": "text/javascript",
+												"packages": {}
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "UserId",
+												"value": "{{newRandomCustomerId}}",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "http://localhost:49834/orders/list/{{newCustomerId1}}",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "49834",
+											"path": [
+												"orders",
+												"list",
+												"{{newCustomerId1}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "List All Orders - Admin",
+							"event": [
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											"let responseData = pm.response.json();\r",
-											"pm.globals.set(\"newOrderId1\", responseData.orderId);\r",
-											"\r",
 											"pm.test(\"Status code is 200\", function () {\r",
 											"    pm.response.to.have.status(200);\r",
 											"});"
@@ -807,19 +1552,16 @@
 								}
 							],
 							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"customerName\": \"Vishal123\",\r\n    \"customerAddress\": \"Street City State 1234\",\r\n    \"customerEmail\": \"vishal123@company123.com\",\r\n    \"shippingAddress\": \"Street City State 1234\",\r\n    \"orderItems\": [\r\n        {\r\n            \"productId\": \"{{newProductId1}}\",\r\n            \"Quantity\": 5\r\n        },\r\n        {\r\n            \"productId\": \"{{newProductId2}}\",\r\n            \"Quantity\": 2\r\n        }\r\n    ]\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
+								"method": "GET",
+								"header": [
+									{
+										"key": "UserId",
+										"value": "{{AdminIdForAuthorization}}",
+										"type": "text"
 									}
-								},
+								],
 								"url": {
-									"raw": "http://localhost:49834/orders/create",
+									"raw": "http://localhost:49834/orders/list",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -827,32 +1569,19 @@
 									"port": "49834",
 									"path": [
 										"orders",
-										"create"
+										"list"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Place Order - 2",
+							"name": "List All Orders - Customer",
 							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								},
 								{
 									"listen": "test",
 									"script": {
 										"exec": [
-											"let responseData = pm.response.json();\r",
-											"pm.globals.set(\"newOrderId2\", responseData.orderId);\r",
-											"\r",
 											"pm.test(\"Status code is 200\", function () {\r",
 											"    pm.response.to.have.status(200);\r",
 											"});"
@@ -863,106 +1592,14 @@
 								}
 							],
 							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"customerName\": \"Vishal123\",\r\n    \"customerAddress\": \"Street City State 1234\",\r\n    \"customerEmail\": \"vishal123@company123.com\",\r\n    \"shippingAddress\": \"Street City State 1234\",\r\n    \"orderItems\": [\r\n        {\r\n            \"productId\": \"{{newProductId1}}\",\r\n            \"Quantity\": 5\r\n        },\r\n        {\r\n            \"productId\": \"{{newProductId2}}\",\r\n            \"Quantity\": 2\r\n        }\r\n    ]\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://localhost:49834/orders/create",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "49834",
-									"path": [
-										"orders",
-										"create"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - 1 - By Id",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"\r",
-											"\r",
-											""
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
 								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:49834/orders/{{newOrderId1}}/",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "49834",
-									"path": [
-										"orders",
-										"{{newOrderId1}}",
-										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Order - 2 - By Id",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"let responseData = pm.response.json();\r",
-											"pm.globals.set(\"newOrderId2\", responseData.orderId);"
-										],
-										"type": "text/javascript",
-										"packages": {}
+								"header": [
+									{
+										"key": "UserId",
+										"value": "{{newCustomerId1}}",
+										"type": "text"
 									}
-								}
-							],
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:49834/orders/{{newOrderId2}}/",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "49834",
-									"path": [
-										"orders",
-										"{{newOrderId2}}",
-										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "List All Orders",
-							"request": {
-								"method": "GET",
-								"header": [],
+								],
 								"url": {
 									"raw": "http://localhost:49834/orders/list",
 									"protocol": "http",

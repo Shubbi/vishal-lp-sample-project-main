@@ -11,9 +11,9 @@
     {   
         Pending = 1, //order submitted 
         Processing = 2, //only Admin  
-        Shipped = 3, //only Admin
-        Delivered = 4, //only Admin - or - might be application from a trusted Career like UPS, USPS, FedEx etc.
-        Cancelled = 5, //cancellation can only happen if the order is in Pending/Processing Status
+        Cancelled = 3, //cancellation can only happen if the order is in Pending/Processing Status
+        Shipped = 4, //only Admin
+        Delivered = 5, //only Admin - or - might be application from a trusted Career like UPS, USPS, FedEx etc.        
         ReturnRequested = 6, // ReturnRequested can only happen if the order is Delivered - Only Admin
         Returned = 7 // Return can only be done by Admin 
     }

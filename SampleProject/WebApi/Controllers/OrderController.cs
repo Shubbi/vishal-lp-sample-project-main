@@ -128,7 +128,7 @@ namespace WebApi.Controllers
             return Success(new List<OrderResponseDto>());
         }
         
-        [Route("list")]
+        [Route("list/{customerId:Guid}")]
         [HttpGet]
         [CustomAuthFilter("Admin", "Customer")]
         public HttpResponseMessage GetOrdersForCustomer(Guid customerId)
