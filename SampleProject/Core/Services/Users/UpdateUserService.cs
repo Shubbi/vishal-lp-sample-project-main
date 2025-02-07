@@ -6,7 +6,7 @@ using Data.Repositories;
 namespace Core.Services.Users
 {
     //Needed to change the scope to support IUserRepository from UserService    
-    [AutoRegister(AutoRegisterTypes.Scope)]
+    [AutoRegister]
     public class UpdateUserService : IUpdateUserService
     {
         //Moved IUserRepository here to support both Create and Update

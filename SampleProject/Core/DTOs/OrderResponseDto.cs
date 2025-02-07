@@ -12,6 +12,7 @@ namespace Core.DTOs
         public decimal OrderTotal { get; set; }
         public Guid CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public OrderStatus OrderStatus { get; set; }
         public List<OrderItemResponseDto> Items { get; } = new List<OrderItemResponseDto>();
 
         public static OrderResponseDto GetOrderResponseDto(Order order)
@@ -24,7 +25,8 @@ namespace Core.DTOs
                 OrderId = order.Id,
                 CustomerId = order.Customer.Id,
                 CustomerName = order.Customer.Name,
-                OrderTotal = order.TotalPrice
+                OrderTotal = order.TotalPrice,
+                OrderStatus = order.Status
             };
 
             order.Items.ForEach(x =>

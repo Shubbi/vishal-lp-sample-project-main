@@ -56,13 +56,13 @@ namespace WebApi.Filters
 
             var userId = userIdList.FirstOrDefault();
 
-            if (string.IsNullOrWhiteSpace(userId) || !Guid.TryParse(userId, out var guid))
+            if (string.IsNullOrWhiteSpace(userId) || !Guid.TryParse(userId, out var userGuid))
             {
                 actionContext.Response = new HttpResponseMessage(HttpStatusCode.Unauthorized) { ReasonPhrase = "Missing or Invalid UserId key"};
                 return;
             }
 
-            var user = getUserService.GetUser(guid);
+            var user = getUserService.GetUser(userGuid);
 
             if (user == null)
             {
@@ -86,20 +86,6 @@ namespace WebApi.Filters
                 };
                 return;
             }
-
-            if (userTypeString.Equals("Customer", StringComparison.OrdinalIgnoreCase))
-            {
-                //Need to replace this with actual call to order service
-                if(true)
-                {
-                    actionContext.Response = new System.Net.Http.HttpResponseMessage(System.Net.HttpStatusCode.Unauthorized)
-                    {                        
-                        ReasonPhrase = "Invalid Order"
-                    };
-                    return;
-                }
-            }
-
 
             var identity = new ClaimsIdentity("Custom");
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userId.ToString()));

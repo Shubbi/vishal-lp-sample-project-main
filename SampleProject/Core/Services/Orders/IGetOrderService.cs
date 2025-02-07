@@ -9,5 +9,7 @@ namespace Core.Services.Orders
     {
         Order GetOrder(Guid id);
         IEnumerable<Order> GetOrders();
+        bool IsOrderAccessibleToCustomer(Guid Id, Guid customerId);
+        IEnumerable<Order> GetOrdersForCustomer(Guid customerId);
     }
 }

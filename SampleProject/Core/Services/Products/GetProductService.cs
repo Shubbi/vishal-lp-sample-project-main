@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Core.Services.Products
 {    
-    [AutoRegister(AutoRegisterTypes.Scope)]
+    [AutoRegister]
     public class GetProductService : IGetProductService
     {
         private readonly IUnitOfWork _unitOfWork;

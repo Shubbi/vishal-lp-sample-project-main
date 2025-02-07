@@ -7,6 +7,6 @@ namespace Core.Services.Orders
 {
     public interface IUpdateOrderService
     {
-        void Update(Order order);
+        void Update(Order order, OrderStatus status, UserTypes userType);
     }
 }

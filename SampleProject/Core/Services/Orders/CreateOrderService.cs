@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Core.Services.Orders
 {
-    [AutoRegister(AutoRegisterTypes.Scope)]
+    [AutoRegister]
     public class CreateOrderService : ICreateOrderService
     {
         private readonly IUnitOfWork _unitOfWork;

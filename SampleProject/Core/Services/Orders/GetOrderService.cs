@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Core.Services.Orders
 {
-    [AutoRegister(AutoRegisterTypes.Scope)]
+    [AutoRegister]
     public class GetOrderService : IGetOrderService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -24,6 +24,14 @@ namespace Core.Services.Orders
         public IEnumerable<Order> GetOrders()
         {
             return _unitOfWork.Orders.GetAll();
+        }
+        public IEnumerable<Order> GetOrdersForCustomer(Guid customerId)
+        {
+            return _unitOfWork.Orders.GetOrdersForCustomer(customerId);
+        }
+        public bool IsOrderAccessibleToCustomer(Guid Id, Guid customerId)
+        {
+            return _unitOfWork.Orders.IsOrderAccessibleToCustomer(Id, customerId);
         }
     }
 }
