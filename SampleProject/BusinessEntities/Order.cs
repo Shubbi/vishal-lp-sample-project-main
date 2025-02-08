@@ -6,18 +6,19 @@ using System.Xml.Schema;
 namespace BusinessEntities
 {
     public class Order : IdObject
-    {
-        //Calculated field
-        public Decimal TotalPrice => CalculateTotalPrice();
-        public DateTime CreatedDate { get; set; }
-        public OrderStatus Status { get; set; } = OrderStatus.Pending;
-        public List<OrderItem> Items { get; set;} = new List<OrderItem>();
+    {   
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;        
         public Guid CustomerId { get; set; }
         public User Customer { get; set; }
-
-        //Keeping it simple for now
+        
+        //Keeping it simple for now and adding Shipping Address here only
+        //Also not adding different fields for city, state, zip code etc.
         public string ShippingAddress { get; set; }
         public DateTime? ShippingDate { get; set; }
+        public List<OrderItem> Items { get; set; } = new List<OrderItem>();
+        public DateTime CreatedDate { get; set; }
+        //Calculated field
+        public Decimal TotalPrice => CalculateTotalPrice();
 
         private Decimal CalculateTotalPrice()
         {
