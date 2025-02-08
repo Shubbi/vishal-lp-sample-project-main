@@ -10,6 +10,8 @@ using WebApi.Models.Users;
 namespace WebApi.Controllers
 {
     //ToDo - Implement Authorization to ensure that only Admin can access this
+    //Not doing it so that the initial postman setup can work
+    //We can do it by creating a user of type Admin directly in the database first     
     [RoutePrefix("users")]
     public class UserController : BaseApiController
     {
