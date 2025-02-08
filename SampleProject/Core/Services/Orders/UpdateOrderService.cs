@@ -34,6 +34,12 @@ namespace Core.Services.Orders
             throw new InvalidOperationException(errorMessage);
         }
 
+        //You may see UserType.Employee also allowed some operations.
+        //However From WebAPI, I'm only allowing Admin and Customer
+        //That's for future extensions as ideally Organization's employees can have varying roles not just Admin
+        //We can further incorporate Roles class in our design
+        //We can use the roles to extend the Claims in our CustomAuthFilter
+        //If at all there is some code for UserType.Employee, it may not be fully functionall
         private static bool CanUpdateOrderStatus(OrderStatus currentStatus, OrderStatus newStatus, UserTypes userType)
         {
             switch (currentStatus)

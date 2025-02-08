@@ -28,6 +28,13 @@ namespace WebApi.Filters
             
         }
 
+        //Currently I'm only allowing Admin and Customer to perform any operations on Products or Orders
+        //You may see UserType.Employee also allowed in some operations like updating an Order. 
+        //But that's Only  for future extensions as ideally Organization's employees can have varying roles not just Admin
+        //We can further incorporate Roles class in our design
+        //We can use the roles to extend the Claims in our CustomAuthFilter
+
+
         public override void OnAuthorization(HttpActionContext actionContext)
         {
             var getUserService = (IGetUserService)actionContext.Request.GetDependencyScope().GetService(typeof(IGetUserService));
