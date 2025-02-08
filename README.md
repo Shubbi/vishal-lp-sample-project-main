@@ -35,16 +35,16 @@
 
 ### Order
 - Create (Place Order)
-    - When a customer whose ema
+    - Creates an Order and a customer if not existing. 
 - UpdateOrderStatus
     - The only thing we allow updating is the status.
-    - Only Admin/Customer and that too depending on what is the current status
+    - Only Admin/Customer and that too depending on what is the current status.
 - GetOrder By Id
-    - Admin / Customer who placed the order can access
+    - Admin / Customer who placed the order can access.
 - GetOrders
-    - Admin only
+    - Admin only.
 - GetOrdersForCustomer
-    - Admin / Customer who placed the order can access
+    - Admin / Customer who placed the order can access.
 
 ** Limitations
 - I have not implemented an additional Cart feature which would have enabled customers to create a draft order which has not been submitted yet. This would have allowed customers to add/remove items from the cart till the time he is ready to submit.
@@ -65,9 +65,17 @@
 - Very naive form of Authentication being used.
 - We expect a header field named "UserId" in the request.
 Depending on the value of this header field, we check the database and find out if the user is Admin or a Customer. Based on that we allow/deny access to a particular resource.
-- See [CustomAuthFilter.cs](./SampleProject/WebApi/Filters/CustomAuthFilter.cs) file  
+- See [CustomAuthFilter.cs](./SampleProject/WebApi/Filters/CustomAuthFilter.cs) file.  
 
 ** Limitation - Authorization only being tested for Products and Orders. For User controller not checking the authorization which obviously we will not do in the real time scenario &#9786;
+
+## Logging 
+Not Implemented for this poc, but can be done by injecting the ILogger and using Serilog or any other logging library. 
+
+## Unit Testing
+Implemented for 
+- CreateOrderService [CreateOrderServiceTests](./SampleProject/Tests/Core.Test/CreateOrderServiceTests.cs)
+- UpdateOrderService [UpdateOrderServiceTests](./SampleProject/Tests/Core.Test/UpdateOrderServiceTests.cs)
 
 ## Postman Setup
 Assuming an admin with id 9422740e-6426-4c46-8445-3f5274a62424 present in the system.
