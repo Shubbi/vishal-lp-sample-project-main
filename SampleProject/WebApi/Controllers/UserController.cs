@@ -40,6 +40,22 @@ namespace WebApi.Controllers
             {
                 return ConflictError($"User {userId} already exists");
             }
+
+            //Checking to ensure the user if it is type of Customer
+            //If same email already exists we should not be able to create it
+            //For Admin and Employees, I'm not sure,
+            //As sometimes it happens that some employees have a previleged user account and 
+            //an ordinary account for admin and non admin operations
+            //Ideally this should be checked in the Business layer
+            if(model.Type == UserTypes.Customer)
+            {
+                user = _getUserService.GetUsers(UserTypes.Customer, string.Empty, model.Email).FirstOrDefault();
+                if (user != null)
+                {
+                    return ConflictError($"User with email {model.Email} already exists");
+                }
+            }            
+
             user = _createUserService.Create(userId, model.Name, model.Email, model.Type, model.AnnualSalary, model.Tags);
             return Success(new UserData(user));
         }
@@ -58,6 +74,13 @@ namespace WebApi.Controllers
             {
                 return DoesNotExist();
             }
+                        
+            //Not sure but we need to think about
+            //whether a customer's email can be updated or not
+            //if yes - we have to ensure
+            //that the email is not being used for some other customer
+            //may be a future enhancement
+
             _updateUserService.Update(user, model.Name, model.Email, model.Type, model.AnnualSalary, model.Tags);
             return Success(new UserData(user));
         }
