@@ -72,6 +72,9 @@ Depending on the value of this header field, we check the database and find out 
 ## Logging 
 Not Implemented for this poc, but can be done by injecting the ILogger and using Serilog or any other logging library. 
 
+## Async programming
+Not implemented for the poc, as was trying to follow the architecture around User. But in realtime scenario will definitely use Async via the use of async/ await and Task. 
+
 ## Unit Testing
 Implemented for 
 - CreateOrderService [CreateOrderServiceTests](./SampleProject/Tests/Core.Test/CreateOrderServiceTests.cs)
